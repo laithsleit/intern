@@ -9,8 +9,8 @@ class CreateCommentsTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id('comment_id');
-            $table->unsignedBigInteger('post_id')->constrained('posts');
-            $table->unsignedBigInteger('user_id')->constrained('users');
+            $table->unsignedBigInteger('post_id')->constrained('posts')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->constrained('users')->onDelete('cascade');
             $table->text('comment_text');
             $table->timestamps();
         });
