@@ -9,7 +9,7 @@ class CreateAnalyticsTable extends Migration
     public function up()
     {
         Schema::create('analytics', function (Blueprint $table) {
-            $table->id();
+            $table->id('analytics_id');
             $table->foreignId('post_id')->constrained('posts');
             $table->integer('views_count')->default(0);
             $table->integer('likes_count')->default(0);

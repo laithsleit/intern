@@ -9,6 +9,8 @@ class Analytic extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'analytics_id';
+
     protected $fillable = [
         'post_id',
         'views_count',
@@ -18,6 +20,6 @@ class Analytic extends Model
 
     public function post()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class, 'post_id');
     }
 }

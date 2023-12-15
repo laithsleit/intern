@@ -9,7 +9,7 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->id();
+            $table->id('post_id'); 
             $table->foreignId('user_id')->constrained('users');
             $table->text('content');
             $table->string('media_url')->nullable();

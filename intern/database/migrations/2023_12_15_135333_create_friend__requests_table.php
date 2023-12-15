@@ -8,7 +8,7 @@ class CreateFriendRequestsTable extends Migration
     public function up()
     {
         Schema::create('friend_requests', function (Blueprint $table) {
-            $table->id();
+            $table->id('friend_request_id');
             $table->foreignId('sender_id')->constrained('users');
             $table->foreignId('receiver_id')->constrained('users');
             $table->enum('status', ['Pending', 'Accepted', 'Rejected'])->default('Pending');

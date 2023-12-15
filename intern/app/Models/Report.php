@@ -9,6 +9,8 @@ class Report extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'report_id';
+
     protected $fillable = [
         'reported_by_id',
         'post_id',
@@ -23,6 +25,7 @@ class Report extends Model
 
     public function post()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class, 'post_id');
     }
+
 }
