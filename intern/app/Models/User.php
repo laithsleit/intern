@@ -28,7 +28,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -89,4 +89,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(Report::class, 'reported_by_id');
     }
+    
 }
