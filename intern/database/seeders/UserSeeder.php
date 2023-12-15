@@ -11,7 +11,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         // Fetch roles from the database
-        $roles = DB::table('roles')->pluck('id', 'name');
+        $roles = DB::table('roles')->pluck('role_id', 'name');
 
         // Define users for each role
         $usersData = [

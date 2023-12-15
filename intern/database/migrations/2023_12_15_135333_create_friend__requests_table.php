@@ -9,8 +9,8 @@ class CreateFriendRequestsTable extends Migration
     {
         Schema::create('friend_requests', function (Blueprint $table) {
             $table->id('friend_request_id');
-            $table->foreignId('sender_id')->constrained('users');
-            $table->foreignId('receiver_id')->constrained('users');
+            $table->unsignedBigInteger('sender_id')->constrained('users');
+            $table->unsignedBigInteger('receiver_id')->constrained('users');
             $table->enum('status', ['Pending', 'Accepted', 'Rejected'])->default('Pending');
             $table->timestamps();
         });

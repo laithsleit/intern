@@ -8,9 +8,9 @@ class CreateMessagesTable extends Migration
     public function up()
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->id('message_id'); 
-            $table->foreignId('sender_id')->constrained('users');
-            $table->foreignId('receiver_id')->constrained('users');
+            $table->id('message_id');
+            $table->unsignedBigInteger('sender_id')->constrained('users');
+            $table->unsignedBigInteger('receiver_id')->constrained('users');
             $table->text('message_text');
             $table->string('attachment_url')->nullable();
             $table->timestamps();
