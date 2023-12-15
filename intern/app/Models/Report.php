@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Report extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'reported_by_id',
+        'post_id',
+        'reason',
+        'status',
+    ];
+
+    public function reportedBy()
+    {
+        return $this->belongsTo(User::class, 'reported_by_id');
+    }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
+}
