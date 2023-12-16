@@ -26,23 +26,27 @@ class ReportController extends Controller
 
     // Store a new report
     public function store(Request $request)
-{
-    // $request->validate([
-    //     'post_id' => 'required|exists:posts,id',
-    //     'reason' => 'required|string',
-    // ]);
-    
+    {
+        try {
+            $validatedData = $request->validate([
+                'post_id' => 'required|exists:posts,id',
+                'reason' => 'required|string',
+            ]);
 
-    $report = Report::create([
-        // 'reported_by_id' => auth()->id(),
-        'reported_by_id' => 2,
-        'post_id' => $request->post_id,
-        'reason' => $request->reason,
-        'status' => 'Pending' // Default status
-    ]);
+            $report = Report::create([
+                'reported_by_id' => auth()->id(),
+                'post_id' => $validatedData['post_id'],
+                'reason' => $validatedData['reason'],
+                'status' => 'Pending' // Default status
+            ]);
 
-    return response()->json($report, 201);
-}
+            return response()->json($report, 201);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     // Show a specific report
     public function show(Report $report)
 {
@@ -51,24 +55,37 @@ class ReportController extends Controller
 
 
     // Update a report
+
     public function update(Request $request, Report $report)
-{
-    $request->validate([
-        'status' => 'required|in:Pending,Reviewed,Resolved'
-    ]);
+    {
+        try {
+            $request->validate([
+                'status' => 'required|in:Pending,Reviewed,Resolved'
+            ]);
 
-    $report->update(['status' => $request->status]);
+            $report->update(['status' => $request->status]);
 
-    return response()->json($report);
-}
+            return response()->json($report);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
 
     // Delete a report
     public function destroy(Report $report)
-{
-    $report->delete();
+    {
+        try {
+            $report->delete();
 
-    return response()->json(null, 204);
-}
+            return response()->json(null, 204);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
 }
