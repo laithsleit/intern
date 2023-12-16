@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Friend_Request extends Model
 {
     use HasFactory;
+    protected $table = 'friend_requests';
 
     protected $primaryKey = 'friend_request_id';
     protected $fillable = [

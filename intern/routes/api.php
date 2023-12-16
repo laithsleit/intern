@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
 
@@ -34,6 +36,36 @@ Route::post('/logout', [AuthController::class, 'logout']);
 
 
 
+//posts Routes
+// {{
+//Route to get all users
+Route::get('/posts', [PostController::class, 'index']);
+
+// Route for creating a new post
+Route::post('/posts', [PostController::class, 'store']);
+
+// Route for getting a specific post
+Route::get('/posts/{post}', [PostController::class, 'show']);
+
+// Route for updating a specific post
+Route::put('/posts/{post}', [PostController::class, 'update']);
+
+// Route for deleting a specific post
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+//  }}
+
+// // // // // // // // // //
+Route::get('/friends/{userId}', [FriendRequestController::class, 'index']);
+Route::get('/pending-requests/{userId}', [FriendRequestController::class, 'selectPendding']);
+Route::post('/send-friend-request', [FriendRequestController::class, 'sendingFriendRequest']);
+// // // // // // // // // //
+
+
+
+
 //----- Report --------/
 
 Route::apiResource('reports', ReportController::class);
+
+
+//--------------------//
