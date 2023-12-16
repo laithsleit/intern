@@ -4,6 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AnalyticController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +32,12 @@ Route::resource('comments', CommentController::class);
 Route::post('/signup', [AuthController::class, 'sign_up']);
 Route::post('login', [AuthController::class,'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
+
+/////////////////////////Analytics///////////////////////////////////////////////////
+Route::resource('analytics', AnalyticController::class);
+Route::get('analytics/post/{post_id}', [AnalyticController::class, 'getAnalyticsForPost']);
+Route::put('analytics/{post_id}/update-likes-comments', [AnalyticController::class, 'updateLikesAndComments']);
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+
