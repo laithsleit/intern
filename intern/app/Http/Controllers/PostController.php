@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use File;
 class PostController extends Controller
 {
 
@@ -51,39 +52,25 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
-        //     $validatedData = $request->validate([
-        //         'name' => 'required|string',
-        //         'description' => 'required|string',
-        //         'image' => 'required|string', // Expecting image as a base64 encoded string
-        //     ]);
+        try {
+            $post=Post::create($request->all());
+            if ($request->hasFile('media_url')) {
+                $img = $request->file('media_url');
+                $extintion= $img->getClientOriginalExtension();
+                $imagename =  Str::uuid().'.'.$extintion;
+                $img->move(public_path('posts'), $imagename);
+                $post->media_url = $imagename;
+            }
+            $post->update();
 
-        //     // Decode base64 image data to a file
-        //     $imageData = $validatedData['image'];
-        //     $imageData = str_replace('data:image/jpeg;base64,', '', $imageData); // Adjust if different image types are expected
-        //     $imageData = str_replace(' ', '+', $imageData);
-        //     $image = base64_decode($imageData);
-
-        //     $imageName = Str::random(32) . '.jpeg'; // Always assuming jpeg for simplicity
-
-        //     // Save image to storage
-        //     Storage::disk('public')->put($imageName, $image);
-
-        //     // Create the post
-        //     Post::create([
-        //         'name' => $validatedData['name'],
-        //         'image' => $imageName,
-        //         'description' => $validatedData['description']
-        //     ]);
-
-        //     return response()->json([
-        //         'message' => 'Product successfully created.'
-        //     ], 200);
-        // } catch (\Exception $e) {
-        //     return response()->json([
-        //         'message' => 'Something went really wrong!'
-        //     ], 500);
-        // }
+            return response()->json([
+                'message' => 'Post successfully created.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Something went really wrong!'
+            ], 500);
+        }
     }
 
 
@@ -126,43 +113,28 @@ class PostController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Post $post){
-    // try {
-        // Find post
-        // $post = Post::find($id);
-        // if (!$post) {
-        //     return response()->json([
-        //         'message' => 'Post Not Found.'
-        //     ], 404);
-        // }
+    try {
+         if ($request->hasFile('media_url')) {
+            $img = $request->file('media_url');
+            $extintion= $img->getClientOriginalExtension();
+            $imagename =  Str::uuid().'.'.$extintion;
+            $img->move(public_path('posts'), $imagename);
+            $old_image_path = public_path('posts/'.$post->media_url);
+            if (File::exists($old_image_path)) {
+                File::delete($old_image_path);
+            }
+            $post->media_url = $imagename;
+        }
+        $post->update();
 
-        // $post->content = $request->input('content');
-
-        // if ($request->hasFile('image')) {
-        //     $storage = Storage::disk('public');
-
-        //     // Old image deletion
-        //     if ($storage->exists($post->media_url)) {
-        //         $storage->delete($post->media_url);
-        //     }
-
-        //     $imageName = Str::random(32) . "." . $request->file('image')->getClientOriginalExtension();
-        //     $post->media_url = $imageName;
-
-        //     // Save the new image to the storage
-        //     $storage->put($imageName, file_get_contents($request->file('image')));
-        // }
-
-        // Update the post
-        // $post->save();
-
-        // return response()->json([
-        //     'message' => 'Post successfully updated.'
-        // ], 200);
-        // } catch (\Exception $e) {
-        //     return response()->json([
-        //         'message' => 'Something went wrong!'
-        //     ], 500);
-        // }
+        return response()->json([
+            'message' => 'Post successfully updated.'
+        ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Something went wrong!'
+            ], 500);
+        }
     }
     /**
      * Remove the specified resource from storage.
