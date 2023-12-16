@@ -9,8 +9,8 @@ class CreateReportsTable extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id('report_id');
-            $table->unsignedBigInteger('reported_by_id')->constrained('users');
-            $table->unsignedBigInteger('post_id')->constrained('posts');
+            $table->unsignedBigInteger('reported_by_id')->constrained('users')->onDelete('cascade');
+            $table->unsignedBigInteger('post_id')->constrained('posts')->onDelete('cascade');
             $table->text('reason');
             $table->enum('status', ['Pending', 'Reviewed'])->default('Pending');
             $table->timestamps();
