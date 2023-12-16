@@ -53,12 +53,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
+        try {
             $post=Post::create($request->all());
-            // retu
-            // $a=Analytic::create([
-            //     'post_id' => $post->id,
-            // ]);
+            // return response()->json($post->);
+            $a=Analytic::create([
+                'post_id' => $post->post_id,
+            ]);
             if ($request->hasFile('media_url')) {
                 $img = $request->file('media_url');
                 $extintion= $img->getClientOriginalExtension();
@@ -70,11 +70,11 @@ class PostController extends Controller
             return response()->json([
                 'message' => 'Post successfully created.'
             ], 200);
-        // } catch (\Exception $e) {
-        //     return response()->json([
-        //         'message' => 'Something wrong!'
-        //     ], 500);
-        // }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Something wrong!'
+            ], 500);
+        }
     }
 
 
