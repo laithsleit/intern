@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Analytic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use File;
@@ -52,8 +53,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        // try {
             $post=Post::create($request->all());
+            // retu
+            // $a=Analytic::create([
+            //     'post_id' => $post->id,
+            // ]);
             if ($request->hasFile('media_url')) {
                 $img = $request->file('media_url');
                 $extintion= $img->getClientOriginalExtension();
@@ -62,15 +67,14 @@ class PostController extends Controller
                 $post->media_url = $imagename;
             }
             $post->update();
-
             return response()->json([
                 'message' => 'Post successfully created.'
             ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Something went really wrong!'
-            ], 500);
-        }
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         'message' => 'Something wrong!'
+        //     ], 500);
+        // }
     }
 
 
