@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Analytic;
@@ -7,59 +6,60 @@ use Illuminate\Http\Request;
 
 class AnalyticController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // ...
+
+    
     public function index()
     {
-        //
+        $analytics = Analytic::all();
+
+        $totalLikes = $analytics->sum('likes_count');
+        $totalComments = $analytics->sum('comments_count');
+
+        return response()->json([
+            'totalLikes' => $totalLikes,
+            'totalComments' => $totalComments,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function getAnalyticsForPost($post_id)
     {
-        //
+        $analytics = Analytic::where('post_id', $post_id)->get();
+
+        $totalLikes = $analytics->sum('likes_count');
+        $totalComments = $analytics->sum('comments_count');
+
+        return response()->json([
+            'totalLikes' => $totalLikes,
+            'totalComments' => $totalComments,
+        ]);
+    }
+    public function updateLikesAndComments(Request $request, $post_id)
+    {
+        $request->validate([
+            'likes_count' => 'integer',
+            'comments_count' => 'integer',
+        ]);
+
+        $analytics = Analytic::where('post_id', $post_id)->first();
+
+        if (!$analytics) {
+            return response()->json(['message' => 'Analytics not found for the given post_id'], 404);
+        }
+
+        $analytics->update([
+            'likes_count' => $request->input('likes_count', $analytics->likes_count),
+            'comments_count' => $request->input('comments_count', $analytics->comments_count),
+        ]);
+
+        return response()->json(['message' => 'Likes and comments updated successfully']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Analytic $analytic)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Analytic $analytic)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Analytic $analytic)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Analytic $analytic)
-    {
-        //
-    }
 }
+
+
+    
+
+
+
