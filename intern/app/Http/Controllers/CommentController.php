@@ -30,14 +30,13 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'post_id' => 'required|exists:posts,post_id',
-            'content' => 'required|string',
-        ]);
+
+
 
         $comment = new Comment;
         $comment->post_id = $request->post_id;
-        $comment->content = $request->content;
+        $comment->user_id = $request->user_id; // If user authentication is required
+        $comment->comment_text = $request->comment_text;
         $comment->save();
 
         return response()->json(['message' => 'Comment added successfully!', 'comment' => $comment]);
