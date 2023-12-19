@@ -15,37 +15,39 @@ class UserController extends Controller
         return response()->json($users);
     }
 
-    public function store(Request $request)
-    {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'role_id' => 'required|exists:roles,id',
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-            'bio' => 'nullable|string',
-            'privacy_setting' => ['required', Rule::in(['Public', 'Private'])],
-        ]);
-    
-        // Hash the password and add it to the validated data
-        $validatedData['password_hash'] = Hash::make($validatedData['password']);
-        unset($validatedData['password']); // Remove the plaintext password from the array
-    
-        // Create the user with the validated data
-        $user = User::create($validatedData);
-    
-        // Handle profile image upload if present
-        if ($request->hasFile('profile_image')) {
-            $imagePath = $request->file('profile_image')->store('user/profile_images', 'public');
-            $user->profile_image_url = $imagePath;
-            $user->save();
-        }
-    
-        // Return the created user as a JSON response
-        return response()->json($user, 201);
+
+public function store(Request $request)
+{
+    // Create a new user instance
+    $user = new User;
+
+    // Assign values from the request to the user object.
+    // No validation is performed here.
+    $user->role_id = $request->role_id;
+    $user->name = $request->name;
+    $user->username = $request->username;
+    $user->email = $request->email;
+    $user->bio = $request->bio;
+    $user->privacy_setting = $request->privacy_setting;
+
+    // Hash the password and set it on the user object
+    $user->password = Hash::make($request->password);
+
+    // Save the user to the database
+    $user->save();
+
+    // Handle profile image upload if present
+    if ($request->hasFile('profile_image')) {
+        $imagePath = $request->file('profile_image')->store('user/profile_images', 'public');
+        $user->profile_image_url = $imagePath;
+        $user->save();
     }
-    
+
+    // Return the created user as a JSON response
+    return response()->json($user, 201);
+}
+
+
 
     public function show($id)
     {
@@ -89,4 +91,6 @@ class UserController extends Controller
         $user->delete();
         return response()->json(['message' => 'User deleted successfully']);
     }
+
+
 }

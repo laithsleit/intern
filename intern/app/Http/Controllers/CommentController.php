@@ -30,15 +30,11 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-
-
-
         $comment = new Comment;
         $comment->post_id = $request->post_id;
         $comment->user_id = $request->user_id; // If user authentication is required
         $comment->comment_text = $request->comment_text;
         $comment->save();
-
         return response()->json(['message' => 'Comment added successfully!', 'comment' => $comment]);
     }
 
@@ -73,6 +69,14 @@ class CommentController extends Controller
         return response()->json(null, 204);
     }
 
-    // Additional methods like create and edit can be removed if they are not used,
-    // as the Laravel resource controller typically does not need them.
+    public function showCommentsByPost($post_id)
+    {
+        $comments = Comment::where('post_id', $post_id)->get();
+
+        if ($comments->isEmpty()) {
+            return response()->json(['message' => 'No comments found for this post'], 404);
+        }
+
+        return response()->json(['comments' => $comments]);
+    }
 }

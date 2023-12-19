@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 /////////////////////////comment//////////////////////////////////////////
 Route::resource('comments', CommentController::class);
+Route::get('/posts/{post_id}/comments', [CommentController::class, 'showCommentsByPost']);
 ////////////////////////////////////////////////////////////////////////////////////////
 
 Route::post('/signup', [AuthController::class, 'sign_up']);
