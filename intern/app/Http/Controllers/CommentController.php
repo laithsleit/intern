@@ -30,15 +30,17 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the request data
-        $validatedData = $request->validate([
+        $request->validate([
             'post_id' => 'required|exists:posts,id',
-            'user_id' => 'required|exists:users,id',
-            'comment_text' => 'required|string',
+            'content' => 'required|string',
         ]);
 
-        $comment = Comment::create($validatedData);
-        return response()->json($comment, 201);
+        $comment = new Comment;
+        $comment->post_id = $request->post_id;
+        $comment->content = $request->content;
+        $comment->save();
+
+        return response()->json(['message' => 'Comment added successfully!', 'comment' => $comment]);
     }
 
     /**
