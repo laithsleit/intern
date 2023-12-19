@@ -10,19 +10,19 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        return Comment::all();
+        // Check if 'post_id' is present in the request
+        if ($request->has('post_id')) {
+            // Fetch comments for the specified post
+            $postId = $request->input('post_id');
+            $comments = Comment::where('post_id', $postId)->get();
+        } else {
+            // If 'post_id' is not provided, return all comments
+            $comments = Comment::all();
+        }
 
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json(['comments' => $comments]);
     }
 
     /**
@@ -30,10 +30,15 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $comment=Comment::create($request->all());
-        return response()->json($comment, 201);
+        // Validate the request data
+        $validatedData = $request->validate([
+            'post_id' => 'required|exists:posts,id',
+            'user_id' => 'required|exists:users,id',
+            'comment_text' => 'required|string',
+        ]);
 
+        $comment = Comment::create($validatedData);
+        return response()->json($comment, 201);
     }
 
     /**
@@ -41,17 +46,7 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
         return response()->json($comment);
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Comment $comment)
-    {
-        //
     }
 
     /**
@@ -59,11 +54,13 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
-        //
-        $comment->update($request->all());
+        // Validate the request data
+        $validatedData = $request->validate([
+            'comment_text' => 'sometimes|string',
+        ]);
 
+        $comment->update($validatedData);
         return response()->json($comment);
-
     }
 
     /**
@@ -71,9 +68,10 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
         $comment->delete();
-
-    return response()->json(null, 204);
+        return response()->json(null, 204);
     }
+
+    // Additional methods like create and edit can be removed if they are not used,
+    // as the Laravel resource controller typically does not need them.
 }

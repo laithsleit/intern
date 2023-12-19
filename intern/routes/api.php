@@ -9,7 +9,7 @@ use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AnalyticController;
-
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,3 +70,9 @@ Route::post('/send-friend-request', [FriendRequestController::class, 'sendingFri
 //----- Report --------/
 
 Route::apiResource('reports', ReportController::class);
+
+
+
+
+// UserController --------------------------------
+Route::apiResource('users', UserController::class);
