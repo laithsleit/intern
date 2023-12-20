@@ -35,7 +35,7 @@ class CommentController extends Controller
         $comment->user_id = $request->user_id; // If user authentication is required
         $comment->comment_text = $request->comment_text;
         $comment->save();
-        return response()->json(['message' => 'Comment added successfully!', 'comment' => $comment]);
+        return response()->json($comment);
     }
 
     /**
@@ -70,13 +70,17 @@ class CommentController extends Controller
     }
 
     public function showCommentsByPost($post_id)
-    {
-        $comments = Comment::where('post_id', $post_id)->get();
+{
+    // Eager load the user relationship along with comments
+    $comments = Comment::with('user')
+                       ->where('post_id', $post_id)
+                       ->get();
 
-        if ($comments->isEmpty()) {
-            return response()->json(['message' => 'No comments found for this post'], 404);
-        }
-
-        return response()->json(['comments' => $comments]);
+    if ($comments->isEmpty()) {
+        return response()->json(['message' => 'No comments found for this post'], 404);
     }
+
+    return response()->json( $comments);
+}
+
 }
