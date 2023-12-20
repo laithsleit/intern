@@ -31,9 +31,38 @@ function PlayerTable() {
     setShowModal(false);
   };
 
-  const deletePlayer = (id) => {
-    setPlayers(players.filter((player) => player.id !== id));
+  const deletePlayer = (user_id) => {
+    // Display an alert to confirm the deletion
+    const confirmDeletion = window.confirm('Are you sure you want to delete this user?');
+  
+    if (confirmDeletion) {
+      // If the user confirms, send a DELETE request to the API
+      const deleteUser = async () => {
+        try {
+          const response = await fetch(`http://localhost:8000/api/users/${user_id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+  
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+  
+          // If the deletion is successful, update the local state
+          setPlayers(players.filter((player) => player.user_id !== user_id));
+        } catch (error) {
+          console.error('Error deleting user:', error);
+          // Handle the error (e.g., display an error message)
+        }
+      };
+  
+      // Call the deleteUser function
+      deleteUser();
+    }
   };
+  
 
   const editPlayer = (player) => {
     setShowModal(true);
