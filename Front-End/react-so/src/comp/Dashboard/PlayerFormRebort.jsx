@@ -95,7 +95,7 @@ const PlayerForm = ({ player, setShowModal, addPlayer, updatePlayer }) => {
           </svg>
         </button>
         <form className="px-6 pb-4 space-y-6 lg:px-8 sm:pb-6 xl:pb-8" onSubmit={handleSubmit}>
-          <h3 className="text-xl font-medium text-gray-900 dark:text-white">{player ? 'Edit User' : 'Add New Player'}</h3>
+          <h3 className="text-xl font-medium text-gray-900 dark:text-white">{player ? 'Edit Player' : 'Add New Player'}</h3>
           <div>
             <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
             <input

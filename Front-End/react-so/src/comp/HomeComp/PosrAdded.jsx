@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import userPr from '../../img/aaaaa.png'
 export default function PostAdded() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,6 +67,12 @@ export default function PostAdded() {
   };
 
   const handleDeletePost = async (postId) => {
+    const shouldDelete = window.confirm("Are you sure you want to delete this post?");
+    
+    if (!shouldDelete) {
+      return;
+    }
+  
     try {
       const response = await fetch(`http://localhost:8000/api/posts/${postId}`, {
         method: 'DELETE',
@@ -74,11 +80,11 @@ export default function PostAdded() {
           'Content-Type': 'application/json',
         },
       });
-
+  
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-
+  
       const updatedPosts = posts.filter((post) => post.post_id !== postId);
       setPosts(updatedPosts);
     } catch (error) {
@@ -86,7 +92,7 @@ export default function PostAdded() {
       setError('Error deleting post. Please try again later.');
     }
   };
-
+  
   const handleCommentInputChange = (event, postId) => {
     setCommentInputs({
       ...commentInputs,
@@ -142,6 +148,36 @@ export default function PostAdded() {
       [postId]: !showComments[postId],
     });
   };
+  const name = sessionStorage.getItem('userName')
+  const handleReportPost = async (postId) => {
+    const user_id = sessionStorage.getItem('user_id');
+    const reportData = {
+      reported_by_id: user_id,
+      post_id: postId,
+      reason: "Inappropriate content",
+      status: "Pending",
+      updated_at: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+    };
+
+    try {
+      const response = await fetch('http://localhost:8000/api/reports', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reportData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      alert('Report submitted successfully');
+    } catch (error) {
+      console.error('Error reporting post:', error);
+    }
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -157,20 +193,23 @@ export default function PostAdded() {
 
   return (
     <>
-      {posts.map((post) => (
+      {posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((post) => (
         <div key={post.post_id} className="post">
           <div style={{ justifyContent: 'space-between' }} className="box-post">
             <Link style={{ cursor: 'pointer' }} to={`/Profile/${post.user_id}`}>
               <span style={{ display: 'flex', alignItems: 'center' }}>
                 <img
                   style={{ width: '20px' }}
-                  src={post.profile_image_url || 'default_user_image.jpg'}
+                  src={userPr}
                   alt="User"
                 />
                 <h4 style={{ color: '#000', fontWeight: '300' }}>{post.username}</h4>
               </span>
             </Link>
-            <button onClick={() => handleDeletePost(post.post_id)}>DELETE</button>
+            <span>
+              <button style={{marginRight:"20px"}} onClick={() => handleReportPost(post.post_id)}>REPORT</button>
+              <button onClick={() => handleDeletePost(post.post_id)}>DELETE</button>
+            </span>
           </div>
           <p>{post.content}</p>
           <img
@@ -179,7 +218,6 @@ export default function PostAdded() {
             alt={`Post ${post.post_id}`}
           />
           <span style={{ width: "100%", display: "flex", justifyContent: "space-between", marginTop: "50px", borderTop: "1px solid #000" }}>
-
             <input
               className="comment-input"
               type="text"
@@ -191,7 +229,6 @@ export default function PostAdded() {
             <button
               style={{ marginTop: "20px" }}
               onClick={() => handleAddComment(post.post_id)}>Add Comment</button>
-
           </span>
           {post.comments && post.comments.length > 0 && (
             <div>
@@ -202,7 +239,7 @@ export default function PostAdded() {
               {showComments[post.post_id] && (
                 <ul>
                   {post.comments.map((comment) => (
-                    <li key={comment.comment_id}>{comment.comment_text}</li>
+                    <li className='lia' key={comment.comment_id}>{name} : {comment.comment_text}</li>
                   ))}
                 </ul>
               )}

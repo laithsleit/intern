@@ -2,6 +2,7 @@ import React from 'react'
 import Logo from '../../img/newlogo.webp'
 import { Link } from 'react-router-dom'
 export default function Header() {
+ 
   return (
     <>
         <header>
@@ -14,9 +15,7 @@ export default function Header() {
                     <a href="#"><i className="fa-solid fa-message"></i></a>
         
                 </div>
-                <a className='Login' href="#">Logout</a>
-                {/* <a className='Login' href="#">Login</a>
-                <a className='Login' href="#">Sign Up</a> */}
+                <Link to={'./Login'}  className='Login' href="#">Logout</Link>
             </div>
         </header>
     </>

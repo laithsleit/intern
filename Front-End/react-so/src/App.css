@@ -20,7 +20,10 @@ header {
   padding: 40px;
   justify-content: space-evenly;
 }
-
+.lia {
+  background: #ffffffa3;
+  padding: 10px;
+}
 .footer{
   background:royalblue;
   padding:30px 0px;

@@ -15,7 +15,7 @@ const Login = () => {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
-
+    
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
 
@@ -44,8 +44,11 @@ const Login = () => {
         sessionStorage.setItem('isLoggedin', 'true');
 
         setError('');
-
-        navigate('/a');
+        if (sessionStorage.getItem('userRole') == 4) {
+        navigate('/DashbordUser');
+        }else {
+          navigate('/a');
+        }
       } catch (error) {
         setError('Invalid email or password');
       }

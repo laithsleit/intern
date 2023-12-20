@@ -9,12 +9,36 @@ export default function Profile() {
   const [error, setError] = useState(null);
   const [commentInputs, setCommentInputs] = useState({});
   const [allComments, setAllComments] = useState({});
+  const [userData, setUserData] = useState({});
   const [showComments, setShowComments] = useState({});
 
   useEffect(() => {
     fetchPosts();
     fetchAllComments();
+    fetchUserData();
   }, []);
+
+ const fetchUserData = async () => {
+  const userId = sessionStorage.getItem('user_id');
+
+  try {
+    const response = await fetch(`http://localhost:8000/api/users/${userId}`);
+    console.log('Full response:', response);
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const userData = await response.json();
+    setUserData(userData);
+    setLoading(false);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    setError('Error fetching user data. Please try again later.');
+    setLoading(false);
+  }
+};
+
 
   const fetchPosts = async () => {
     try {
@@ -161,14 +185,16 @@ export default function Profile() {
     <>
     <div class="container-card-p">
     <div class="card">
-      <div class="profile-picture">
-        <img src={ImgMan} alt="Profile Picture" />
-      </div>
-      <h2 class="name">Qusey Hammad</h2>
-      <h3 class="username">@quseyhammad</h3>
-      <p class="tagline">quseyhammad@gmail.com</p>
-      <p class="description">Masih belajar CSS dan HTML.</p>
-      <Link to="/Home" class="button">Home</Link>
+    <div className="profile-picture">
+            <img src={ImgMan} alt="Profile Picture" />
+          </div>
+          <h2 className="name">{userData.name}</h2>
+          <p className="tagline">{userData.email}</p>
+          <p className="tagline"><input  type='password' value={userData.password_hash} /></p>
+
+          <Link to="/a" className="button">
+            Home
+          </Link>
     </div>
 
 </div>
