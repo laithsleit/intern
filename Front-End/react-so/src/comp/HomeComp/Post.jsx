@@ -6,8 +6,13 @@ import { Link } from 'react-router-dom';
 export default function Post() {
   const [postContent, setPostContent] = useState('');
   const [mediaFile, setMediaFile] = useState(null);
-
+  const [username , setUsername] = useState();
+  
   const handleAddPost = async () => {
+    function getRandomNumberBetween150And250() {
+      return Math.floor(Math.random() * (250 - 150 + 1)) + 150;
+    }
+    const rand=  getRandomNumberBetween150And250()
     // Assume you have a function to get the user_id from the session
     const user_id = sessionStorage.getItem('user_id');
 
@@ -15,7 +20,7 @@ export default function Post() {
     const postData = {
       user_id:user_id ,
       content: postContent,
-      media_url: 'https://example.com/media/sample.jpg', // Update with your media URL or handle media file upload
+      media_url: `https://picsum.photos/${rand}`, // Update with your media URL or handle media file upload
     };
     console.log(user_id);
     console.log(postContent); 
@@ -33,6 +38,7 @@ export default function Post() {
       // Check if the request was successful (status code 2xx)
       if (response.ok) {
         console.log('Post added successfully!');
+        window.location.reload()
         // You can perform additional actions here if needed
       } else {
         console.error('Failed to add post:', response.statusText);
@@ -47,7 +53,7 @@ export default function Post() {
       <div className="post">
         <div className="box-post">
           <Link style={{ cursor: 'pointer' }} to="/Profile">
-            <img src={Userrr} alt="user" />
+            <img src={Userrr} alt="user" /> <h3></h3>
           </Link>
           <label>
             <input
@@ -63,9 +69,9 @@ export default function Post() {
         <div style={{display : "flex" , justifyContent:"space-between"}} className="cont">
         <span style={{width:"70%" , display:"flex" , justifyContent:"space-evenly"}}>
         
-        <label className='fileIn' style={{color :"#fff", background:"royalblue"}} htmlFor="file"> <span><i class="fa-solid fa-image"></i></span> ADD IMG</label>
+        <label className='fileIn' style={{color :"#fff", background:"royalblue"}} htmlFor="file"> <span><i className="fa-solid fa-image"></i></span> ADD IMG</label>
         <input id='file'  style={{background :"transparent" , display:"none", color:"transparent "}} type="file" onChange={(e) => setMediaFile(e.target.files[0])} />
-        <label className='fileIn' style={{color :"#fff" , background:"#00A36C"}} htmlFor="file"> <span><i class="fa-solid fa-image"></i></span> ADD VEDIO</label>
+        <label className='fileIn' style={{color :"#fff" , background:"#00A36C"}} htmlFor="file"> <span><i className="fa-solid fa-image"></i></span> ADD VEDIO</label>
         <input id='file'  style={{background :"transparent" , display:"none", color:"transparent "}} type="file" onChange={(e) => setMediaFile(e.target.files[0])} />
         </span>
         

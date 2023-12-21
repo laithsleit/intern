@@ -7,6 +7,7 @@ export default function AboutUs() {
     <>
         <Headera />
         <SectionAbout />
+        <br/> <br/> <br/>
         <Footer />
     </>
   )

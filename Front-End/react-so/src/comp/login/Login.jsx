@@ -44,7 +44,7 @@ const Login = () => {
         sessionStorage.setItem('isLoggedin', 'true');
 
         setError('');
-        if (sessionStorage.getItem('userRole') == 4) {
+        if (sessionStorage.getItem('userRole') == 2) {
         navigate('/DashbordUser');
         }else {
           navigate('/a');

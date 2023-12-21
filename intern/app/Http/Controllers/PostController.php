@@ -85,7 +85,7 @@ class PostController extends Controller
 
      public function show(Post $post)
      {
-         $postWithUser = Post::with('user')->find($post->post_id);
+         $postWithUser = Post::with('user:user_id,username,profile_image_url')->get()->find($post->post_id);
 
          if (!$postWithUser) {
              return response()->json([

@@ -13,14 +13,11 @@ class CommentController extends Controller
     public function index(Request $request)
     {
         // Check if 'post_id' is present in the request
-        if ($request->has('post_id')) {
+
             // Fetch comments for the specified post
             $postId = $request->input('post_id');
             $comments = Comment::where('post_id', $postId)->get();
-        } else {
-            // If 'post_id' is not provided, return all comments
-            $comments = Comment::all();
-        }
+
 
         return response()->json(['comments' => $comments]);
     }

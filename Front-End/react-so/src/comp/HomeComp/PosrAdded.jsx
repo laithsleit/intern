@@ -123,7 +123,7 @@ export default function PostAdded() {
       const newComment = await response.json();
   
       const updatedPosts = posts.map((post) => {
-        if (post.post_id === postId) {
+        if (post.post_id == postId) {
           return {
             ...post,
             comments: Array.isArray(post.comments) ? [...post.comments, newComment] : [newComment],
@@ -202,7 +202,8 @@ export default function PostAdded() {
                   style={{ width: '20px' }}
                   src={userPr}
                   alt="User"
-                />
+                /> 
+                <h3></h3>
                 <h4 style={{ color: '#000', fontWeight: '300' }}>{post.username}</h4>
               </span>
             </Link>

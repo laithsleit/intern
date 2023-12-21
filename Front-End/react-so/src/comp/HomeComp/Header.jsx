@@ -15,7 +15,7 @@ export default function Header() {
                     <a href="#"><i className="fa-solid fa-message"></i></a>
         
                 </div>
-                <Link to={'./Login'}  className='Login' href="#">Logout</Link>
+                <Link to={'/Login'}  className='Login' href="#">Logout</Link>
             </div>
         </header>
     </>
